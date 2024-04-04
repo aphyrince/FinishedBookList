@@ -31,7 +31,7 @@ public class BookData {
         return this.name;
     }
     public void setDate(String date){
-        if(this.date && this.date.equals(date)){
+        if(this.date != null && this.date.equals(date)){
             return;
         }
         this.date = date;
