@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class ShowPanel extends JPanel{
     private JScrollPane scrollPane;
-    private JList list;
+    private JList<BookData> list;
     private JLabel count;
     private JPanel buttonPanel;
     private JButton addButton;
@@ -22,7 +22,7 @@ public class ShowPanel extends JPanel{
         setSize(400,700);
         setLayout(new FlowLayout());
 
-        list = new JList<>();
+        list = new JList<BookData>();
         scrollPane = new JScrollPane(list);
         count = new JLabel("읽은 책 수 : ");
         addButton = new JButton("추가");
@@ -48,6 +48,10 @@ public class ShowPanel extends JPanel{
         this.add(buttonPanel);
     }
 
+    public void addBookList(BookData bookData){
+        bookData.setConnectedComponent(new JLabel(bookData.getName()+" / "+bookData.getDate()));
+        this.list.add(bookData.getConnectedComponent());
+    }
     public int getFinishedBookCount(){
         return finishedBookCount;
     }
