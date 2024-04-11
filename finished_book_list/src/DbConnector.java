@@ -57,10 +57,6 @@ public class DbConnector {
             this.url = (String) jsonObject.get("url");
             this.user = (String) jsonObject.get("user");
             this.password = (String) jsonObject.get("password");
-
-            System.out.println(this.url);
-            System.out.println(this.user);
-            System.out.println(this.password);
         } catch (Exception e) {
             e.printStackTrace();
         }
