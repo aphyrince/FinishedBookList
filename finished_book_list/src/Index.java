@@ -3,35 +3,35 @@ import java.awt.*;
 import java.util.List;
 
 public class Index extends JFrame {
-    private final String DataPath = "C:\\Users\\dkswj\\Desktop\\피니시드북스_프로젝트\\finished_book_list\\src\\data.csv";
-    private Container contentPanel;
     private ViewPanel viewPanel;
     private ControllPanel controllPanel;
     private DataController dataController;
-    private List<String[]> dataList;
+
+    private List<BookData> bookList;
 
     public Index(){
         super("읽은 책 목록");
         init();
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            public void run(){
+                dataController.saveData();
+            }
+        });
     }
 
     private void init(){
-        contentPanel = getContentPane();
-        contentPanel.setLayout(new BorderLayout());
-        viewPanel = new ViewPanel();
-        controllPanel = new ControllPanel();
-        dataController = new DataController(DataPath);
-        dataList = dataController.getDataList();
+        dataController = new DataController();
+        bookList = dataController.getBookList();
+        
+        viewPanel = new ViewPanel(bookList);
+        controllPanel = new ControllPanel(viewPanel);
 
-        contentPanel.add(viewPanel,BorderLayout.CENTER);
-        contentPanel.add(controllPanel,BorderLayout.NORTH);
-
-        viewPanel.setBookColumn(dataList);
+        add(viewPanel,BorderLayout.CENTER);
+        add(controllPanel,BorderLayout.NORTH);
         
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 700);
-        contentPanel.setSize(400, 700);
         setLocationRelativeTo(null);
         setVisible(true);
     }

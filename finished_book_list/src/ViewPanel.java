@@ -1,42 +1,59 @@
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.util.List;
 import javax.swing.*;
+import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
-public class ViewPanel extends JPanel{
+public class ViewPanel extends JPanel {
     private JScrollPane scrollPane;
     private JPanel listPanel;
+    private List<BookData> bookList;
 
-    public ViewPanel(){
-        setBackground(Color.CYAN);
-        setSize(400,600);
-        setLayout(new FlowLayout());
+    public ViewPanel(List<BookData> bookList) {
+        this.bookList = bookList;
+        initializeComponents();
+        populateListPanel();
+    }
+
+    private void initializeComponents() {
+        setLayout(new BorderLayout());
 
         listPanel = new JPanel();
-        listPanel.setLayout(new FlowLayout());
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+
         scrollPane = new JScrollPane(listPanel);
-        
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        add(scrollPane);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void setBookColumn(List<String[]> dataList){
-        for(String[] str : dataList){
-            if(str.length==1){
-                add(new BookColumn(str[0], "null"));
+    private void populateListPanel() {
+        listPanel.removeAll();
+
+        for (BookData book : bookList) {
+            JPanel bookPanel = new JPanel();
+            bookPanel.setLayout(new BorderLayout());
+
+            JLabel titleLabel = new JLabel(book.getName());
+            JLabel dateLabel = new JLabel("-");
+            if(book.getDate()!=null){
+                dateLabel = new JLabel(new SimpleDateFormat("yyyy.mm.dd").format(book.getDate()));
             }
-            else{
-                add(new BookColumn(str[0], str[1]));
-            }
+
+            bookPanel.add(titleLabel, BorderLayout.WEST);
+            bookPanel.add(dateLabel, BorderLayout.EAST);
+
+            listPanel.add(bookPanel);
         }
-    }
-    public void addBookColumn(String bookName, String date){
-        add(new BookColumn(bookName, date));
-    }
-    public void updateBookColumn(String bookName, String date){
 
+        listPanel.revalidate();
+        listPanel.repaint();
     }
-    public void deleteBookColumn(String bookName){
 
+
+    public void addBook(BookData bookData){
+        if(bookData == null)
+            return;
+        bookList.addFirst(bookData);
+        populateListPanel();
     }
 }

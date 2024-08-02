@@ -1,39 +1,37 @@
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 public class DataController {
-    private String filePath;
-    private List<String[]> dataList;
-    private Scanner sc;
+    public final String dataFilePath = "C:\\Users\\dkswj\\Desktop\\피니시드북스_프로젝트\\finished_book_list\\src\\data.csv";
+    private List<BookData> bookList;
 
-    public DataController(String filePath) {
-        this.filePath = filePath;
-        dataList = new LinkedList<>();
+    public DataController(){
+        bookList = new LinkedList<>();
         try{
-            sc = new Scanner(new File(filePath));
+            Scanner sc = new Scanner(new File(dataFilePath));
             while(sc.hasNextLine()){
-                dataList.add(sc.nextLine().split(","));
+                bookList.add(new BookData(sc.nextLine()));
             }
             sc.close();
         }catch(IOException e){
             e.printStackTrace();
         }
     }
-    public List<String[]> getDataList(){
-        return dataList;
+
+    public List<BookData> getBookList(){
+        return bookList;
     }
 
     public void saveData(){
         try{
-            BufferedWriter br = new BufferedWriter(new FileWriter(filePath,false));
-            for(String[] str : dataList){
-                br.write(String.join(",", str));
+            BufferedWriter br = new BufferedWriter(new FileWriter(dataFilePath,false));
+            for(BookData bookData : bookList){
+                br.write(bookData.toString());
                 br.newLine();
             }
             br.close();

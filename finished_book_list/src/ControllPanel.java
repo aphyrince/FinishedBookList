@@ -1,23 +1,43 @@
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class ControllPanel extends JPanel{
+public class ControllPanel extends JPanel {
     private JTextField inputField;
     private JButton addButton;
+    private ViewPanel viewPanel;
 
-    public ControllPanel(){
-        setLayout(new FlowLayout());
-        setBackground(Color.YELLOW);
-        inputField = new JTextField(25);
+    public ControllPanel(ViewPanel viewPanel) {
+        this.viewPanel = viewPanel;
+
+        setLayout(new BorderLayout());
+        setSize(400, 150);
+
+        inputField = new JTextField(30);
         addButton = new JButton("+");
 
-        inputField.setSize(300, 50);
-        addButton.setSize(50,50);
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String inputText = inputField.getText();
+                if (inputText.trim().isEmpty())
+                return;
+                inputField.setText("");
+                String[] bookDetails = inputText.split(",");
+                BookData newBookData = null;
+                if (bookDetails.length == 2) {
+                    newBookData = new BookData(inputText);
+                } else if (bookDetails.length == 1) {
+                    newBookData = new BookData(inputText, null);
+                }
+                
+                viewPanel.addBook(newBookData);
+            }
+        });
 
-        setSize(400,100);
-        add(inputField);
-        add(addButton);
+        add(inputField,BorderLayout.WEST);
+        add(addButton, BorderLayout.EAST);
     }
 }
